@@ -125,12 +125,9 @@ fn round_trip_claim() {
         let token =
             encode(&Header::new(alg), &my_claims, &EncodingKey::from_rsa_pem(privkey_pem).unwrap())
                 .unwrap();
-        let token_data = decode::<Claims>(
-            &token,
-            &DecodingKey::from_rsa_pem(pubkey_pem).unwrap(),
-            &validation,
-        )
-        .unwrap();
+        let token_data =
+            decode::<Claims>(&token, &DecodingKey::from_rsa_pem(pubkey_pem).unwrap(), &validation)
+                .unwrap();
         assert_eq!(my_claims, token_data.claims);
         assert!(token_data.header.kid.is_none());
 
