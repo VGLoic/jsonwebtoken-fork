@@ -121,6 +121,7 @@ fn round_trip_claim() {
     for &alg in RSA_ALGORITHMS {
         let mut validation Validation::new(alg);
         validation.set_audience(["https://my-random-audience.com"]);
+        
         let token =
             encode(&Header::new(alg), &my_claims, &EncodingKey::from_rsa_pem(privkey_pem).unwrap())
                 .unwrap();
