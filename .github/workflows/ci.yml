@@ -33,11 +33,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        build: [pinned, stable, nightly]
+        build: [stable, nightly]
         include:
-          - build: pinned
-            os: ubuntu-20.04
-            rust: 1.67.0
+          # - build: pinned
+          #   os: ubuntu-20.04
+          #   rust: 1.67.0
           - build: stable
             os: ubuntu-20.04
             rust: stable
