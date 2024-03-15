@@ -119,15 +119,16 @@ fn round_trip_claim() {
     let certificate_pem = include_bytes!("certificate_rsa_key_pkcs1.crt");
 
     for &alg in RSA_ALGORITHMS {
+        let mut validation = Validation::new(alg);
+        validation.set_audience(&["https://my-random-audience.com"]);
+        validation.set_required_spec_claims(&["exp", "aud"]);
+
         let token =
             encode(&Header::new(alg), &my_claims, &EncodingKey::from_rsa_pem(privkey_pem).unwrap())
                 .unwrap();
-        let token_data = decode::<Claims>(
-            &token,
-            &DecodingKey::from_rsa_pem(pubkey_pem).unwrap(),
-            &Validation::new(alg),
-        )
-        .unwrap();
+        let token_data =
+            decode::<Claims>(&token, &DecodingKey::from_rsa_pem(pubkey_pem).unwrap(), &validation)
+                .unwrap();
         assert_eq!(my_claims, token_data.claims);
         assert!(token_data.header.kid.is_none());
 
